@@ -11,44 +11,51 @@ export class App extends Component {
     filter: '',
   };
 
-  addContact = (name, number) => {
-    const contactToAdd = {
-      name: name,
-      number: Number(number),
-      key: nanoid(),
-    };
+  addContact = ({ name, number }) => {
+    const { contacts } = this.state;
 
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, contactToAdd],
-    }));
+    const isExisting = contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    if (isExisting) {
+      alert(`${isExisting.name} is already in contacts`);
+      return;
+    } else {
+      const contactToAdd = {
+        name: name,
+        number: Number(number),
+        id: nanoid(),
+      };
+
+      this.setState(prevState => ({
+        contacts: [...prevState.contacts, contactToAdd],
+      }));
+    }
   };
 
   onFilterInput = event => {
     this.setState({ filter: event.target.value });
   };
 
-  removeContact = key => {
-    const updatedContacts = this.state.contacts.filter(
-      contact => contact.key !== key
+  removeContact = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }));
+  };
+
+  getFilteredContacts = () => {
+    const { contacts, filter } = this.state;
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
     );
-    this.setState({
-      contacts: updatedContacts,
-    });
   };
 
   render() {
-    const filteredContacts = this.state.contacts.filter(
-      contact =>
-        contact.name &&
-        contact.name.toLowerCase().startsWith(this.state.filter.toLowerCase())
-    );
+    const filteredContacts = this.getFilteredContacts();
     return (
       <div className={styles.wrapper}>
         <h1>Phonebook</h1>
-        <ContactForm
-          contacts={this.state.contacts}
-          addContact={this.addContact}
-        />
+        <ContactForm addContact={this.addContact} />
         <h2>Contacts</h2>
         <Filter onFilterInput={this.onFilterInput} />
         <ContactList

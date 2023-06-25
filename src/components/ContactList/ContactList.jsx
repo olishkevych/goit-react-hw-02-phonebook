@@ -6,12 +6,12 @@ export const ContactList = ({ contacts, removeContact }) => {
     <ul>
       {contacts.map(contact => {
         return (
-          <li className={styles.item} key={contact.key}>
+          <li className={styles.item} key={contact.id}>
             <span>{contact.name} </span>
             <span>{contact.number}</span>
             <button
               className={styles.removeBtn}
-              onClick={() => removeContact(contact.key)}
+              onClick={() => removeContact(contact.id)}
             >
               &times;
             </button>
@@ -28,7 +28,7 @@ ContactList.propTypes = {
     PropTypes.shape({
       name: PropTypes.string.isRequired,
       number: PropTypes.number.isRequired,
-      key: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
     })
   ),
 };

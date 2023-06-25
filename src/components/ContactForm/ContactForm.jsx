@@ -15,16 +15,11 @@ export class ContactForm extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-    const { addContact, contacts } = this.props;
-    if (contacts.find(contact => contact.name === this.state.name)) {
-      alert(`${this.state.name} is already in the contacts.`);
-    } else {
-      addContact(this.state.name, this.state.number);
-      this.setState({
-        name: '',
-        number: '',
-      });
-    }
+    this.props.addContact(this.state);
+    this.setState({
+      name: '',
+      number: '',
+    });
   };
 
   render() {
@@ -45,7 +40,7 @@ export class ContactForm extends Component {
           <input
             type="tel"
             name="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+            pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
             value={this.state.number}
